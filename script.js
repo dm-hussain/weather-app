@@ -6,9 +6,12 @@ const btn = document.querySelector('.btn');
 
 const outputEl = document.querySelector('.output');
 
-btn.addEventListener('click', () => {
+btn.addEventListener('click', (e) => {
+  e.preventDefault();
+
   const city = userInp.value;
-  console.log(city);
+
+  outputEl.innerHTML = '';
 
   const apiURL = `https://api.weatherapi.com/v1/current.json?key=5a45e05a6c084a3f969120500252301&q=${city}&aqi=yes`;
 
@@ -17,17 +20,44 @@ btn.addEventListener('click', () => {
       return res.json();
     })
     .then((data) => {
-      //   console.log(data.current);
-
       const newEl = document.createElement('div');
+      newEl.classList.add('py-6');
       newEl.innerHTML = `
 
 
-            <p class=" text-white font-bold text-xl mt-4">Location:  <span>${data.location.name}</span></p>
-            <p class=" text-white font-bold text-xl mt-4">Temperature:  <span>${data.current['temp_c']}</span></p>
-            <p class=" text-white font-bold text-xl mt-4">Condition:  <span>${data.current.condition.text}</span></p>
+            <p class=" fade-in text-white font-bold text-xl mt-4">Location:  <span class="font-semibold">${
+              data.location.name
+            } [${data.location.region}- ${data.location.country}] </span></p>
+            <p class=" fade-in text-white font-bold text-xl mt-4">Date:  <span class="font-semibold">${data.location.localtime.slice(
+              0,
+              10
+            )}  </span></p>
+            <p class=" fade-in text-white font-bold text-xl mt-4">Temperature:  <span class="font-semibold">${
+              data.current['temp_c']
+            }</span></p>
+            <p class=" fade-in text-white font-bold text-xl mt-4 flex items-center">Condition:&nbsp  <span class="font-semibold flex items-center"> ${
+              data.current.condition.text
+            } <img src="${data.current.condition.icon}" alt="Weather">
+            </span></p>
 
 `;
       outputEl.append(newEl);
+    })
+    .catch((err) => {
+      const newEl = document.createElement('div');
+      newEl.classList.add(
+        'py-6',
+        'fade-in',
+        'text-white',
+        'font-bold',
+        'text-xl',
+        'mt-4',
+        'text-center'
+      );
+      newEl.innerHTML = 'Not Found for the above location';
+
+      outputEl.append(newEl);
     });
+
+  userInp.value = '';
 });
