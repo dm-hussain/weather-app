@@ -10,7 +10,7 @@ btn.addEventListener('click', () => {
   const city = userInp.value;
   console.log(city);
 
-  const apiURL = `http://api.weatherapi.com/v1/current.json?key=5a45e05a6c084a3f969120500252301&q=${city}&aqi=yes`;
+  const apiURL = `https://api.weatherapi.com/v1/current.json?key=5a45e05a6c084a3f969120500252301&q=${city}&aqi=yes`;
 
   fetch(apiURL)
     .then((res) => {
